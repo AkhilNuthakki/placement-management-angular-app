@@ -1,0 +1,193 @@
+
+<div class="justify-content-center p-sm-5 pt-2 mt-2">
+    <ng-container *ngIf="errorMessage">
+        <app-error-message [errorMessage]="errorMessage"></app-error-message>
+    </ng-container>
+
+    <ng-container *ngIf="!isAuthorizationRequestsExists && isRequestsFetched">
+        <ng-container  *ngIf="isStudent" >
+            <div class="text-center">
+                <h4 class="p-3">No authorization requests found !!!</h4>
+                <h5 class="p-3"> Please submit the placement authorization request by clicking the below button</h5>
+                <button class="theme-btn m-3" (click)="raiseAuthorizationRequest()">Raise Authorization Request</button>
+            </div>
+        </ng-container>
+    
+        <ng-container *ngIf="!isStudent">
+            <div class="text-center">
+                <h4 class="p-3"> No submitted authorization requests found !!!</h4>
+            </div>
+        </ng-container>
+    </ng-container>
+
+
+    <ng-container *ngIf="isAuthorizationRequestsExists && isRequestsFetched">
+
+        <ng-container *ngIf="isStudent">
+            <div class="p-sm-2 d-flex justify-content-end">
+                <button class="theme-btn" (click)="raiseAuthorizationRequest()">New Authorization Request</button>
+            </div>
+            <div>
+                <hr>
+                <h5 class="m-3">My Placement Authorization Requests</h5>
+            </div>
+            <div class="list-border p-sm-4 m-sm-2" *ngFor="let placementAuthReq of placementAuthRequests">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="row p-sm-2">
+                            <div class="col-sm-4">
+                                <strong>Role :</strong>
+                                {{placementAuthReq.placement_role.title}}
+                            </div>
+                            <div class="col-sm-4">
+                                <strong>Organization :</strong> 
+                                {{placementAuthReq.placement_provider.name}}
+                            </div>
+                        </div>
+                        <div class="row p-sm-2">
+                            <div class="col-sm-4">
+                                <strong>Start Date :</strong>
+                                {{placementAuthReq.placement_role.start_date | date}}
+                            </div>
+                            <div class="col-sm-4">
+                                <strong>End Date :</strong>
+                                {{placementAuthReq.placement_role.end_date | date}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="align-self-center col-sm-2">
+                        <button *ngIf="placementAuthReq.request_submission_status != 'SUBMITTED'" 
+                        class="theme-btn m-2" (click)="viewAuthorizationRequest(placementAuthReq.id)">
+                        Submit Request
+                        </button>
+                        <button *ngIf="placementAuthReq.request_submission_status == 'SUBMITTED'" 
+                        class="theme-btn m-2" (click)="viewRequestOverview(placementAuthReq.id)">
+                        View Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="isProvider">
+            <div>
+                <h5 class="m-3">Placement Authorization Requests</h5>
+            </div>
+            <div class="list-border p-sm-4 m-sm-3" *ngFor="let placementAuthReq of placementAuthRequests">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <span *ngIf="placementAuthReq.provider_form_submission_status == 'SUBMITTED'">
+                            Provider Form is submitted for the authorisation request raised by <strong>{{placementAuthReq.student.first_name}} </strong>
+                        </span>
+                        <span *ngIf="placementAuthReq.provider_form_submission_status != 'SUBMITTED'">
+                            <strong>{{placementAuthReq.student.first_name}}</strong> has submitted a placement authorization request. 
+                            <br>
+                            <div class="mt-sm-1">Please submit the required details as a placement provider for the university to process this authorization request</div>
+                        </span>
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="theme-btn m-2" (click)="viewProviderForm(placementAuthReq.provider_form_id, placementAuthReq.id)">
+                            <span *ngIf="placementAuthReq.provider_form_submission_status == 'SUBMITTED'">View</span>
+                            <span *ngIf="placementAuthReq.provider_form_submission_status != 'SUBMITTED'">Submit</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="isTutor">
+            <div class="p-sm-4 pb-sm-2">
+                <form [formGroup]="filterReqForm">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="providerName">Provider Name</label>
+                            <input class="form-control" placeholder="Filter by Provider Name" type="text" id="providerName"
+                            formControlName="providerName" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="placementAuthReqStatus">Authorization Request Status</label>
+                            <select class="form-control" formControlName="placementAuthReqStatus">
+                                <option value="Filter by status" disabled selected>Filter by status</option>
+                                <option *ngFor="let status of statusList" [ngValue]="status">{{status}}</option>
+                              </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="course">Course</label>
+                            <select class="form-control" formControlName="course">
+                                <option value="Filter by course" disabled selected>Filter by cource</option>
+                                <option *ngFor="let course of courseList" [ngValue]="course">{{course}}</option>
+                              </select>
+                        </div>
+                        <div class="col-sm-3 p-sm-2 d-flex justify-content-end">
+                            <button class="theme-btn m-2" (click)="OnFilter()">Filter</button>
+                            <button class="theme-btn m-2" (click)="onClearFilter()">Clear</button>
+                        </div>
+    
+                    </div>
+                </form>
+            </div>
+
+                <div>
+                    <hr>
+                    <h5 class="m-3">Placement Authorization Requests</h5>
+                </div>
+                <ng-container *ngIf="!isFilteredAuthorizationRequestsExists && isRequestsFiltered">
+                    <div class="text-center p-sm-4 m-sm-4">
+                        <h4 class="p-3"> No authorization requests found based on given filter details !!!</h4>
+                    </div>
+            </ng-container>
+                <div class="list-border p-sm-4 m-sm-3" *ngFor="let placementAuthReq of placementAuthRequests">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="row p-sm-2">
+                                <div class="col-sm-4">
+                                    <strong>Name :</strong>
+                                    {{placementAuthReq.student.first_name + ' ' + placementAuthReq.student.last_name}}
+                                </div>
+                                <div class="col-sm-8">
+                                    <strong>Course :</strong>
+                                    {{placementAuthReq.student.course}}
+                                </div>
+                            </div>
+                            <div class="row p-sm-2">
+                                <div class="col-sm-4">
+                                    <strong>Role :</strong> 
+                                    {{placementAuthReq.placement_role.title}}
+                                </div>
+                                <div class="col-sm-4">
+                                    <strong>Organization :</strong> 
+                                    {{placementAuthReq.placement_provider.name}}
+                                </div>
+                                <div class="col-sm-4">
+                                    <strong>Contact Name :</strong> 
+                                    {{placementAuthReq.placement_provider.contact_name}}
+                                </div>
+                            </div>
+                            <div class="row p-sm-2">
+                                <div class="col-sm-4">
+                                    <strong>Salary(£) :</strong> 
+                                    {{placementAuthReq.placement_role.salary}}
+                                </div>
+                                <div class="col-sm-4">
+                                    <strong>Start Date :</strong>
+                                    {{placementAuthReq.placement_role.start_date | date}}
+                                </div>
+                                <div class="col-sm-4">
+                                    <strong>End Date :</strong>
+                                    {{placementAuthReq.placement_role.end_date | date}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="align-self-center col-sm-2">
+                            <button class="theme-btn m-2" (click)="viewRequestOverview(placementAuthReq.id)">View Request
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        </ng-container>
+    </ng-container>
+    
+</div>
+
+
+

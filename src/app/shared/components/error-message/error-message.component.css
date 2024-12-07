@@ -1,0 +1,7 @@
+.error-message {
+    border-style: solid;
+    background-color: rgb(234, 213, 217);
+    border-width: 3px;
+    border-color:crimson;
+    border-radius: 10px;
+  }

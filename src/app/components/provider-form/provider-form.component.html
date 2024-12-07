@@ -1,0 +1,1001 @@
+<ng-container *ngIf="errorMessage">
+    <app-error-message [errorMessage]="errorMessage"></app-error-message>
+</ng-container>
+
+<ng-container *ngIf="successMessage">
+    <app-success-message [successMessage]="successMessage"></app-success-message>
+</ng-container>
+
+<div class="p-sm-5 pt-2 mt-2">
+    <form class="form-border p-sm-4 p-3" [formGroup]="providerReqForm" (ngSubmit)="onSubmit()">
+        <h3 class="text-center">Placement Provider Form</h3>
+        <div class="p-sm-3">
+           <p>
+            This form is to be completed by the organisation providing a placement to a University of Leicester student, known as the Placement Provider. We will use this information to assess the role the student has been offered which will form part of their degree programme. As part of this, we will assess whether the role enables the student to meet the learning outcomes of their course.
+           </p><p>
+            In the best interests of the University of Leicester and community of stakeholders, we wish to partner with organisations to offer suitable and appropriate experiences and employment activities to students. We do not work with organisations and/or support students to undertake experience or employment which might adversely affect our reputation or compromise our academic freedom or integrity.
+           </p>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Provider Details</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="providerName">Organization Name</label>
+                    <input class="form-control" placeholder="Organization Name" type="text" id="providerName"
+                        formControlName="providerName" />
+                    <div
+                        *ngIf="!providerReqForm.get('providerName')?.valid && (providerReqForm.get('providerName')?.dirty || providerReqForm.get('providerName')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('providerName')?.errors?.['required']"
+                            class="text-muted">Organization Name is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="providerWebAddress">Website Address</label>
+                    <input class="form-control" placeholder="Website Address" type="text" id="providerWebAddress"
+                        formControlName="providerWebAddress" />
+                    <div
+                        *ngIf="!providerReqForm.get('providerWebAddress')?.valid && (providerReqForm.get('providerWebAddress')?.dirty || providerReqForm.get('providerWebAddress')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('providerWebAddress')?.errors?.['required']"
+                            class="text-muted">Website Address is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-9">
+                    <label for="providerAddress">Organization Address</label>
+                    <input class="form-control" placeholder="Address" type="text" id="providerAddress"
+                        formControlName="providerAddress" />
+                    <div
+                        *ngIf="!providerReqForm.get('providerAddress')?.valid && (providerReqForm.get('providerAddress')?.dirty || providerReqForm.get('providerAddress')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('providerAddress')?.errors?.['required']"
+                            class="text-muted">Organization Address is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <label for="providerPostcode">Postcode</label>
+                    <input class="form-control" placeholder="Postcode" type="text" id="providerPostcode"
+                        formControlName="providerPostcode" />
+                    <div
+                        *ngIf="!providerReqForm.get('providerPostcode')?.valid && (providerReqForm.get('providerPostcode')?.dirty || providerReqForm.get('providerPostcode')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('providerPostcode')?.errors?.['required']"
+                            class="text-muted">Postcode is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-8">
+                    <label for="hasUndertakenAnyActivities">
+                        <span class="required" *ngIf="providerReqForm.get('hasUndertakenAnyActivities')?.errors?.['required']">*</span>
+                        Does your organisation undertake any activity in the following areas: 
+                        <ul>
+                            <li>Environmental damage </li>
+                            <li>Manufacture and sale of armaments </li>
+                            <li>Manufacture and sale of tobacco products </li>
+                            <li>Activities abroad which would be considered illegal in the UK </li>
+                            <li>The causing of harm or injury to third parties  </li>
+                            <li>Gambling/gaming involving money at risk</li>
+                        </ul>
+                        </label>    
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <label class="radio-inline" for="hasUndertakenAnyActivities-Yes">
+                                    <input type="radio" id="hasUndertakenAnyActivities-Yes" formControlName="hasUndertakenAnyActivities" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-2">
+                                <label class="radio-inline" for="hasUndertakenAnyActivities-No">
+                                    <input type="radio" id="hasUndertakenAnyActivities-No" formControlName="hasUndertakenAnyActivities" value="No"> No
+                                </label>
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="radio-inline" for="hasUndertakenAnyActivities-Unsure">
+                                    <input type="radio" id="hasUndertakenAnyActivities-Unsure" formControlName="hasUndertakenAnyActivities" value="Unsure"> Unsure
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-4"  *ngIf="this.providerReqForm.value.hasUndertakenAnyActivities == 'Yes' || (this.viewMode == true && this.providerForm?.placement_provider?.has_undertaken_any_activities == 'Yes')">
+                    <label for="organizationActivities">Please provide more details</label>
+                    <textarea class="form-control" placeholder="Activity details" type="email" id="organizationActivities"
+                        formControlName="organizationActivities" ></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('organizationActivities')?.valid && (providerReqForm.get('organizationActivities')?.dirty || providerReqForm.get('organizationActivities')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('organizationActivities')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Student</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="studentName">Student Name</label>
+                    <input class="form-control" placeholder="Student Name" type="text" id="studentName"
+                        formControlName="studentName" />
+                    <div
+                        *ngIf="!providerReqForm.get('studentName')?.valid && (providerReqForm.get('studentName')?.dirty || providerReqForm.get('studentName')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('studentName')?.errors?.['required']"
+                            class="text-muted">Student Name is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Provider named contact for University and Placement Student</h5>
+            <div class="form-group row">
+                <div class="col-sm-8">
+                    <label for="providerContactName">Contact Name<br>
+                        <small id="helpId" class="text-muted">Please note: This person will need to be accessible as the University will be in touch via email or telephone throughout the placement.</small>
+                    </label>
+                    <input class="form-control" placeholder="Contact Name" type="text" id="providerContactName"
+                        formControlName="providerContactName" />
+                    <div
+                        *ngIf="!providerReqForm.get('providerContactName')?.valid && (providerReqForm.get('providerContactName')?.dirty || providerReqForm.get('providerContactName')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('providerContactName')?.errors?.['required']"
+                            class="text-muted">Contact Name is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="providerContactJobTitle">Contact Job Title</label>
+                    <input class="form-control" placeholder="Contact Job Title" type="text" id="providerContactJobTitle"
+                        formControlName="providerContactJobTitle" />
+                    <div
+                        *ngIf="!providerReqForm.get('providerContactJobTitle')?.valid && (providerReqForm.get('providerContactJobTitle')?.dirty || providerReqForm.get('providerContactJobTitle')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('providerContactJobTitle')?.errors?.['required']"
+                            class="text-muted">Contact Job Title is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="providerContactEmail">Contact Email</label>
+                    <input class="form-control" placeholder="Contact Email" type="email" id="providerContactEmail"
+                        formControlName="providerContactEmail" />
+                    <div
+                        *ngIf="!providerReqForm.get('providerContactEmail')?.valid && (providerReqForm.get('providerContactEmail')?.dirty || providerReqForm.get('providerContactEmail')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('providerContactEmail')?.errors?.['required']"
+                            class="text-muted">Contact Email is
+                            required</small>
+                        <small id="helpId" *ngIf="providerReqForm.get('providerContactEmail')?.errors?.['email']" class="text-muted">Email
+                                should be valid</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="providerTelephone">Contact Telephone</label>
+                    <input class="form-control" placeholder="Contact Telephone" type="text" id="providerTelephone"
+                        formControlName="providerTelephone" />
+                    <div
+                        *ngIf="!providerReqForm.get('providerTelephone')?.valid && (providerReqForm.get('providerTelephone')?.dirty || providerReqForm.get('providerTelephone')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('providerTelephone')?.errors?.['required']"
+                            class="text-muted">Telephone is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Role Details</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="placementRoleTitle">Role Title</label>
+                    <input class="form-control" placeholder="Role Title" type="text" id="placementRoleTitle"
+                        formControlName="placementRoleTitle" />
+                    <div
+                        *ngIf="!providerReqForm.get('placementRoleTitle')?.valid && (providerReqForm.get('placementRoleTitle')?.dirty || providerReqForm.get('placementRoleTitle')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('placementRoleTitle')?.errors?.['required']"
+                            class="text-muted">Role Title is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="placementStartDate">
+                        Role Start Date
+                        <br>
+                        <small id="helpI" class="text-muted">
+                            Expected month if unknown, it can be updated later
+                        </small> 
+                    </label>
+                    <input class="form-control" placeholder="Start Date" type="date" min="{{minRoleStartDate | date:'yyyy-MM-dd'}}" id="placementStartDate" 
+                        formControlName="placementStartDate" />
+                    <div
+                        *ngIf="!providerReqForm.get('placementStartDate')?.valid && (providerReqForm.get('placementStartDate')?.dirty || providerReqForm.get('placementStartDate')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('placementStartDate')?.errors?.['required']"
+                            class="text-muted">Start Date is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="placementEndDate">
+                        Role End Date <br><small id="helpI" class="text-muted">Expected month if unknown</small> 
+                    </label>
+                    <input class="form-control" placeholder="End Date" type="date" id="placementEndDate"
+                        formControlName="placementEndDate" />
+                    <div
+                        *ngIf="!providerReqForm.get('placementEndDate')?.valid && (providerReqForm.get('placementEndDate')?.dirty || providerReqForm.get('placementEndDate')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('placementEndDate')?.errors?.['required']"
+                            class="text-muted">End Date is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="workingHours">Working hours</label>
+                    <input class="form-control" placeholder="hours (per week)" type="number" id="workingHours"
+                        formControlName="workingHours" />
+                    <div
+                        *ngIf="!providerReqForm.get('workingHours')?.valid && (providerReqForm.get('workingHours')?.dirty || providerReqForm.get('workingHours')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('workingHours')?.errors?.['required']" class="text-muted">Working Hours
+                            are required</small>
+                        <small id="helpId" *ngIf="providerReqForm.get('workingHours')?.errors?.['min']" class="text-muted">Role is to be minimum of
+                            35 hours</small>
+                        <small id="helpId" *ngIf="providerReqForm.get('workingHours')?.errors?.['max']" class="text-muted">Role is to be maximum of
+                            48 hours</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="hasProbationPeriod">
+                        <span class="required" *ngIf="providerReqForm.get('hasProbationPeriod')?.errors?.['required']">*</span>
+                        Does your role include a probation period ?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasProbationPeriod-Yes">
+                                    <input type="radio" id="hasProbationPeriod-Yes" formControlName="hasProbationPeriod" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasProbationPeriod-No">
+                                    <input type="radio" id="hasProbationPeriod-No" formControlName="hasProbationPeriod" value="No"> No
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasProbationPeriod == 'Yes' || (this.viewMode == true && this.providerForm?.placement_role?.has_probation_period == 'Yes')">
+                    <label for="probationPeriodInWeeks">Confirm length of your probation period</label>
+                    <input class="form-control" placeholder="Probation Period (In Weeks)" type="number" id="probationPeriodInWeeks"
+                        formControlName="probationPeriodInWeeks" />
+                    <div
+                        *ngIf="!providerReqForm.get('probationPeriodInWeeks')?.valid && (providerReqForm.get('probationPeriodInWeeks')?.dirty || providerReqForm.get('probationPeriodInWeeks')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('probationPeriodInWeeks')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-8">
+                    <label for="roleDescription">Please outline what you expect the student to achieve by the end of the role:</label>
+                    <textarea class="form-control" placeholder="Role Description" type="textarea" id="roleDescription"
+                        formControlName="roleDescription"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('roleDescription')?.valid && (providerReqForm.get('roleDescription')?.dirty || providerReqForm.get('roleDescription')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('roleDescription')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Work Factors</h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="hasAnyHazardsOrRisks"> <span class="required" *ngIf="providerReqForm.get('hasAnyHazardsOrRisks')?.errors?.['required']">*</span> Will the nature of the work undertaken by the student expose them to any hazards or risks?</label>
+                    <small class="text-muted">For example this might include operating machinery, working with hazardous materials, or supporting vulnerable children or adults.</small>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasAnyHazardsOrRisks-Yes">
+                                <input type="radio" id="hasAnyHazardsOrRisks-Yes" formControlName="hasAnyHazardsOrRisks" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasAnyHazardsOrRisks-No">
+                                <input type="radio" id="hasAnyHazardsOrRisks-No" formControlName="hasAnyHazardsOrRisks" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.hasAnyHazardsOrRisks == 'Yes' || (this.viewMode == true && this.providerForm?.work_factor?.has_any_hazards_or_risks == 'Yes')">
+                    <label for="hazardsOrRisks">Please provide details below of the hazards or risks the student will be exposed to, and how you will support them with this</label>
+                    <textarea class="form-control" placeholder="Hazards or Risks" type="textarea" id="hazardsOrRisks"
+                        formControlName="hazardsOrRisks"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('hazardsOrRisks')?.valid && (providerReqForm.get('hazardsOrRisks')?.dirty || providerReqForm.get('hazardsOrRisks')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('hazardsOrRisks')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="isAnyTrainingRequired"><span class="required" *ngIf="providerReqForm.get('isAnyTrainingRequired')?.errors?.['required']">*</span> Does the student need any specific training for the role or to undertake tasks?</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isAnyTrainingRequired-Yes">
+                                <input type="radio" id="isAnyTrainingRequired-Yes" formControlName="isAnyTrainingRequired" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isAnyTrainingRequired-No">
+                                <input type="radio" id="isAnyTrainingRequired-No" formControlName="isAnyTrainingRequired" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.isAnyTrainingRequired == 'Yes' || (this.viewMode == true && this.providerForm?.work_factor?.is_any_training_required == 'Yes')">
+                    <label for="howTrainingIsProvided">Please provide details of how the training will be provided</label>
+                    <textarea class="form-control" placeholder="How the training will be provided" type="textarea" id="howTrainingIsProvided"
+                        formControlName="howTrainingIsProvided"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('howTrainingIsProvided')?.valid && (providerReqForm.get('howTrainingIsProvided')?.dirty || providerReqForm.get('howTrainingIsProvided')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('howTrainingIsProvided')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="isWorkFromHome"><span class="required" *ngIf="providerReqForm.get('isWorkFromHome')?.errors?.['required']">*</span> Does the role involve the student working from their home?</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isWorkFromHome-Yes">
+                                <input type="radio" id="isWorkFromHome-Yes" formControlName="isWorkFromHome" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isWorkFromHome-No">
+                                <input type="radio" id="isWorkFromHome-No" formControlName="isWorkFromHome" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.isWorkFromHome == 'Yes' || (this.viewMode == true && this.providerForm?.work_factor?.is_work_from_home == 'Yes')">
+                    <label for="howFrequentlyWorkFromHome"><span class="required" *ngIf="providerReqForm.get('howFrequentlyWorkFromHome')?.errors?.['required']">*</span> Does the role involve the student working from their home?</label>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label class="radio-inline" for="howFrequentlyWorkFromHome-Permanently">
+                                <input type="radio" id="howFrequentlyWorkFromHome-Permanently" formControlName="howFrequentlyWorkFromHome" value="Permanently">
+                                Permanently
+                            </label>
+                        </div>                    
+                        <div class="col-sm-4">
+                            <label class="radio-inline" for="howFrequentlyWorkFromHome-Hybrid">
+                                <input type="radio" id="howFrequentlyWorkFromHome-Hybrid" formControlName="howFrequentlyWorkFromHome" value="Hybrid"> Hybrid Working
+                            </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="radio-inline" for="howFrequentlyWorkFromHome-Remote">
+                                <input type="radio" id="howFrequentlyWorkFromHome-Remote" formControlName="howFrequentlyWorkFromHome" value="Remote"> Fully Remote
+                            </label>
+                        </div>
+                    </div>
+                </div>     
+            </div>
+            <div class="form-group row" *ngIf="this.providerReqForm.value.isWorkFromHome == 'Yes' || (this.viewMode == true && this.providerForm?.work_factor?.is_work_from_home == 'Yes')">
+                <div class="col-sm-8">
+                    <label for="howStudentIsMonitored">How will the student be monitored and supported during periods that they are working from home?</label>
+                    <textarea class="form-control" placeholder="Provide the necessary information" type="textarea" id="howStudentIsMonitored"
+                        formControlName="howStudentIsMonitored"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('howStudentIsMonitored')?.valid && (providerReqForm.get('howStudentIsMonitored')?.dirty || providerReqForm.get('howStudentIsMonitored')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('howStudentIsMonitored')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Travel and transport factors</h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="isWorkingInDifferentLocation"> <span class="required" *ngIf="providerReqForm.get('isWorkingInDifferentLocation')?.errors?.['required']">*</span> Does the role involve working from sites other than the main address ?</label>
+                    
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isWorkingInDifferentLocation-Yes">
+                                <input type="radio" id="isWorkingInDifferentLocation-Yes" formControlName="isWorkingInDifferentLocation" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isWorkingInDifferentLocation-No">
+                                <input type="radio" id="isWorkingInDifferentLocation-No" formControlName="isWorkingInDifferentLocation" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.isWorkingInDifferentLocation == 'Yes' || (this.viewMode == true && this.providerForm?.travel_factor?.is_working_in_different_location == 'Yes')">
+                    <label for="otherAddress">Please provide details below of how the student will travel from the main address to other sites</label>
+                    <input class="form-control" placeholder="Travel" type="textarea" id="otherAddress"
+                        formControlName="otherAddress"/>
+                    <div
+                        *ngIf="!providerReqForm.get('otherAddress')?.valid && (providerReqForm.get('otherAddress')?.dirty || providerReqForm.get('otherAddress')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('otherAddress')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label for="isRequiredOverseasTravel"><span class="required" *ngIf="providerReqForm.get('isRequiredOverseasTravel')?.errors?.['required']">*</span>Does this placement require any travel outside of the UK?</label>
+                    <small class="text-muted">If a student is travelling overseas at the Placement Providers request, (as part of the job description) then the university is not responsible for the travel insurance and it is the Placement Provider responsibility to risk assess the travel.
+                        If the student is travelling overseas to attend the placement, then the responsibility is with university.
+                        </small>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isRequiredOverseasTravel-Yes">
+                                <input type="radio" id="isRequiredOverseasTravel-Yes" formControlName="isRequiredOverseasTravel" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isRequiredOverseasTravel-No">
+                                <input type="radio" id="isRequiredOverseasTravel-No" formControlName="isRequiredOverseasTravel" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Location and regional factors</h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="isAwareOfAnyRisksAtLocation"> <span class="required" *ngIf="providerReqForm.get('isAwareOfAnyRisksAtLocation')?.errors?.['required']">*</span>Does the organisation’s main location for the student present any risks ?</label>
+                    <small class="text-muted">For example, this might include civil disorder, crime, environmental disasters, infectious disease, or poor healthcare access.</small>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isAwareOfAnyRisksAtLocation-Yes">
+                                <input type="radio" id="isAwareOfAnyRisksAtLocation-Yes" formControlName="isAwareOfAnyRisksAtLocation" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isAwareOfAnyRisksAtLocation-No">
+                                <input type="radio" id="isAwareOfAnyRisksAtLocation-No" formControlName="isAwareOfAnyRisksAtLocation" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.isAwareOfAnyRisksAtLocation == 'Yes' || (this.viewMode == true && this.providerForm?.location_and_region_factor?.is_aware_of_any_risks_at_location == 'Yes')">
+                    <label for="risksAtLocation">Please provide details below of the risks and actions in place to minimise the risk</label>
+                    <textarea class="form-control" placeholder="Risks and Actions" type="textarea" id="risksAtLocation"
+                        formControlName="risksAtLocation"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('risksAtLocation')?.valid && (providerReqForm.get('risksAtLocation')?.dirty || providerReqForm.get('risksAtLocation')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('risksAtLocation')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="providerUKorNonUK"> <span class="required" *ngIf="providerReqForm.get('providerUKorNonUK')?.errors?.['required']">*</span>Does your organisation registered and categorized as UK Provider or Non-UK Provider?</label>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label class="radio-inline" for="providerUKorNonUK-UK">
+                                <input type="radio" id="providerUKorNonUK-UK" formControlName="providerUKorNonUK" value="UK">
+                                UK Provider
+                            </label>
+                        </div>                    
+                        <div class="col-sm-4">
+                            <label class="radio-inline" for="providerUKorNonUK-NonUK">
+                                <input type="radio" id="providerUKorNonUK-NonUK" formControlName="providerUKorNonUK" value="Non-UK"> Non-UK Provider
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Health and environmental factors</h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="isAwareOfPreCautionaryMeasures"> <span class="required" *ngIf="providerReqForm.get('isAwareOfPreCautionaryMeasures')?.errors?.['required']">*</span>Is the student required to take precautionary measures to undertake the placement?</label>
+                    <small class="text-muted">For example, this might include vaccinations, PPE, medical or dietary advice, or specific living arrangements.</small>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isAwareOfPreCautionaryMeasures-Yes">
+                                <input type="radio" id="isAwareOfPreCautionaryMeasures-Yes" formControlName="isAwareOfPreCautionaryMeasures" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="isAwareOfPreCautionaryMeasures-No">
+                                <input type="radio" id="isAwareOfPreCautionaryMeasures-No" formControlName="isAwareOfPreCautionaryMeasures" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.isAwareOfPreCautionaryMeasures == 'Yes' || (this.viewMode == true && this.providerForm?.health_factor?.is_aware_of_pre_cautionary_measures == 'Yes')">
+                    <label for="preCautionaryMeasures">Please provide details below of the precautionary measures</label>
+                    <textarea class="form-control" placeholder="Risks and Actions" type="textarea" id="preCautionaryMeasures"
+                        formControlName="preCautionaryMeasures"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('preCautionaryMeasures')?.valid && (providerReqForm.get('preCautionaryMeasures')?.dirty || providerReqForm.get('preCautionaryMeasures')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('preCautionaryMeasures')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Personal factors</h5>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label for="hasConsideredAnyAdjustments"> <span class="required" *ngIf="providerReqForm.get('hasConsideredAnyAdjustments')?.errors?.['required']">*</span>If required, are you able to support students with any personal factors that may affect their placement?</label>
+                    <small class="text-muted">For example, this might include making reasonable adjustments for physical or mental health conditions or disabilities.</small>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasConsideredAnyAdjustments-Yes">
+                                <input type="radio" id="hasConsideredAnyAdjustments-Yes" formControlName="hasConsideredAnyAdjustments" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasConsideredAnyAdjustments-No">
+                                <input type="radio" id="hasConsideredAnyAdjustments-No" formControlName="hasConsideredAnyAdjustments" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div *ngIf="this.providerReqForm.value.providerUKorNonUK == 'UK' || (this.viewMode == true && this.providerForm?.location_and_region_factor?.provider_ukor_non_uk == 'UK')">
+            <hr>
+            <h5 class="mb-3">Policies and Insurance (UK Providers Only)</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasPublicLiabilityInsurance"> <span class="required" *ngIf="providerReqForm.get('hasPublicLiabilityInsurance')?.errors?.['required']">*</span><strong> UK providers only:</strong> Does your organisation hold Public Liability Insurance or equivalent?</label>
+                    <small class="text-muted">Equivalent within the UK may refer to self-insurance or crown indemnity insurance (NHS).</small>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasPublicLiabilityInsurance-Yes">
+                                <input type="radio" id="hasPublicLiabilityInsurance-Yes" formControlName="hasPublicLiabilityInsurance" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasPublicLiabilityInsurance-No">
+                                <input type="radio" id="hasPublicLiabilityInsurance-No" formControlName="hasPublicLiabilityInsurance" value="No"> No
+                            </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasPublicLiabilityInsurance-NA">
+                                <input type="radio" id="hasPublicLiabilityInsurance-NA" formControlName="hasPublicLiabilityInsurance" value="NA"> N/A (Crown/NHS)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasPublicLiabilityInsurance == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_provider_factor?.has_public_liability_insurance == 'Yes')">
+                    <label for="publicLiabilityInsuranceProviderName">Insurance Provider Name</label>
+                    <input class="form-control" placeholder="Provider Name" type="text" id="publicLiabilityInsuranceProviderName"
+                        formControlName="publicLiabilityInsuranceProviderName"/>
+                    <div
+                        *ngIf="!providerReqForm.get('publicLiabilityInsuranceProviderName')?.valid && (providerReqForm.get('publicLiabilityInsuranceProviderName')?.dirty || providerReqForm.get('publicLiabilityInsuranceProviderName')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('publicLiabilityInsuranceProviderName')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div> 
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasPublicLiabilityInsurance == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_provider_factor?.has_public_liability_insurance == 'Yes')">
+                    <label for="publicLiabilityInsuranceExpiryDate">Expiry Date</label>
+                    <input class="form-control" placeholder="Expiry Date" type="date" id="publicLiabilityInsuranceExpiryDate"
+                        formControlName="publicLiabilityInsuranceExpiryDate"/>
+                    <div
+                        *ngIf="!providerReqForm.get('publicLiabilityInsuranceExpiryDate')?.valid && (providerReqForm.get('publicLiabilityInsuranceExpiryDate')?.dirty || providerReqForm.get('publicLiabilityInsuranceExpiryDate')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('publicLiabilityInsuranceExpiryDate')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.hasPublicLiabilityInsurance == 'No' || (this.viewMode == true && this.providerForm?.policies_and_insurance_provider_factor?.has_public_liability_insurance == 'No')">
+                    <label for="happensWhenThereIsPublicClaim">What will happen if a member of the public makes a claim</label>
+                    <textarea class="form-control" placeholder="Please provide more details" type="text" id="happensWhenThereIsPublicClaim"
+                        formControlName="happensWhenThereIsPublicClaim"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('happensWhenThereIsPublicClaim')?.valid && (providerReqForm.get('happensWhenThereIsPublicClaim')?.dirty || providerReqForm.get('happensWhenThereIsPublicClaim')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('happensWhenThereIsPublicClaim')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>             
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasEmployerLiabilityInsurance"> <span class="required" *ngIf="providerReqForm.get('hasEmployerLiabilityInsurance')?.errors?.['required']">*</span><strong> UK providers only:</strong> Does your organisation hold Employer’s Liability Insurance or equivalent?</label>
+                    <small class="text-muted">This is usually a legal requirement for employing a placement student – for more information see <a target="_" href="https://www.gov.uk/employers-liability-insurance">gov.uk</a></small>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasEmployerLiabilityInsurance-Yes">
+                                <input type="radio" id="hasEmployerLiabilityInsurance-Yes" formControlName="hasEmployerLiabilityInsurance" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasEmployerLiabilityInsurance-No">
+                                <input type="radio" id="hasEmployerLiabilityInsurance-No" formControlName="hasEmployerLiabilityInsurance" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasEmployerLiabilityInsurance == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_provider_factor?.has_employer_liability_insurance == 'Yes')">
+                    <label for="employerInsuranceProviderName">Insurance Provider Name</label>
+                    <input class="form-control" placeholder="Provider Name" type="text" id="employerInsuranceProviderName"
+                        formControlName="employerInsuranceProviderName"/>
+                    <div
+                        *ngIf="!providerReqForm.get('employerInsuranceProviderName')?.valid && (providerReqForm.get('employerInsuranceProviderName')?.dirty || providerReqForm.get('employerInsuranceProviderName')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('employerInsuranceProviderName')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div> 
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasEmployerLiabilityInsurance == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_provider_factor?.has_employer_liability_insurance == 'Yes')">
+                    <label for="employerInsuranceExpiryDate">Expiry Date</label>
+                    <input class="form-control" placeholder="Expiry Date" type="date" id="employerInsuranceExpiryDate"
+                        formControlName="employerInsuranceExpiryDate"/>
+                    <div
+                        *ngIf="!providerReqForm.get('employerInsuranceExpiryDate')?.valid && (providerReqForm.get('employerInsuranceExpiryDate')?.dirty || providerReqForm.get('employerInsuranceExpiryDate')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('employerInsuranceExpiryDate')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.hasEmployerLiabilityInsurance == 'No' || (this.viewMode == true && this.providerForm?.policies_and_insurance_provider_factor?.has_employer_liability_insurance == 'No')">
+                    <label for="happensWhenThereIsEmployeeClaim">What will happen if the placement student becomes ill or injured due to the work they complete on placement with you?</label>
+                    <textarea class="form-control" placeholder="Please provide more details" type="text" id="happensWhenThereIsEmployeeClaim"
+                        formControlName="happensWhenThereIsEmployeeClaim"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('happensWhenThereIsEmployeeClaim')?.valid && (providerReqForm.get('happensWhenThereIsEmployeeClaim')?.dirty || providerReqForm.get('happensWhenThereIsEmployeeClaim')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('happensWhenThereIsEmployeeClaim')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>             
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasProfessionalIndemnityInsurance"> <span class="required" *ngIf="providerReqForm.get('hasProfessionalIndemnityInsurance')?.errors?.['required']">*</span><strong> UK providers only:</strong> Does your organisation hold Professional Indemnity Insurance or equivalent?</label>
+                    <small class="text-muted">This insurance is only applicable if during the placement a student may provide advice, designs, or professional services to the public or other businesses.</small>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasProfessionalIndemnityInsurance-Yes">
+                                <input type="radio" id="hasProfessionalIndemnityInsurance-Yes" formControlName="hasProfessionalIndemnityInsurance" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasProfessionalIndemnityInsurance-No">
+                                <input type="radio" id="hasProfessionalIndemnityInsurance-No" formControlName="hasProfessionalIndemnityInsurance" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasProfessionalIndemnityInsurance == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_provider_factor?.has_professional_indemnity_insurance == 'Yes')">
+                    <label for="indemnityInsuranceProviderName">Insurance Provider Name</label>
+                    <input class="form-control" placeholder="Provider Name" type="text" id="indemnityInsuranceProviderName"
+                        formControlName="indemnityInsuranceProviderName"/>
+                    <div
+                        *ngIf="!providerReqForm.get('indemnityInsuranceProviderName')?.valid && (providerReqForm.get('indemnityInsuranceProviderName')?.dirty || providerReqForm.get('indemnityInsuranceProviderName')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('indemnityInsuranceProviderName')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div> 
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasProfessionalIndemnityInsurance == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_provider_factor?.has_professional_indemnity_insurance == 'Yes')">
+                    <label for="indemnityInsuranceExpiryDate">Expiry Date</label>
+                    <input class="form-control" placeholder="Expiry Date" type="date" id="indemnityInsuranceExpiryDate"
+                        formControlName="indemnityInsuranceExpiryDate"/>
+                    <div
+                        *ngIf="!providerReqForm.get('indemnityInsuranceExpiryDate')?.valid && (providerReqForm.get('indemnityInsuranceExpiryDate')?.dirty || providerReqForm.get('indemnityInsuranceExpiryDate')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('indemnityInsuranceExpiryDate')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>        
+            </div>
+        </div>
+        <div *ngIf="this.providerReqForm.value.providerUKorNonUK == 'Non-UK' || (this.viewMode == true && this.providerForm?.location_and_region_factor?.provider_ukor_non_uk == 'Non-UK')">
+            <hr>
+            <h5 class="mb-3">Policies and Insurance (Overseas Employers only)</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasPublicLiabilityInsuranceNonUK"> <span class="required" *ngIf="providerReqForm.get('hasPublicLiabilityInsuranceNonUK')?.errors?.['required']">*</span><strong> Non-UK providers only:</strong> Would your organisation’s insurances cover liability if your business is held responsible for injury or damage to a client, contractor, or member of the public?</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasPublicLiabilityInsuranceNonUK-Yes">
+                                <input type="radio" id="hasPublicLiabilityInsuranceNonUK-Yes" formControlName="hasPublicLiabilityInsuranceNonUK" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasPublicLiabilityInsuranceNonUK-No">
+                                <input type="radio" id="hasPublicLiabilityInsuranceNonUK-No" formControlName="hasPublicLiabilityInsuranceNonUK" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasPublicLiabilityInsuranceNonUK == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_non_ukprovider_factor?.has_public_liability_insurance == 'Yes')">
+                    <label for="publicLiabilityInsuranceProviderNameNonUK">Insurance Provider Name</label>
+                    <input class="form-control" placeholder="Provider Name" type="text" id="publicLiabilityInsuranceProviderNameNonUK"
+                        formControlName="publicLiabilityInsuranceProviderNameNonUK"/>
+                    <div
+                        *ngIf="!providerReqForm.get('publicLiabilityInsuranceProviderNameNonUK')?.valid && (providerReqForm.get('publicLiabilityInsuranceProviderNameNonUK')?.dirty || providerReqForm.get('publicLiabilityInsuranceProviderNameNonUK')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('publicLiabilityInsuranceProviderNameNonUK')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div> 
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasPublicLiabilityInsuranceNonUK == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_non_ukprovider_factor?.has_public_liability_insurance == 'Yes')">
+                    <label for="publicLiabilityInsuranceExpiryDateNonUK">Expiry Date</label>
+                    <input class="form-control" placeholder="Expiry Date" type="date" id="publicLiabilityInsuranceExpiryDateNonUK"
+                        formControlName="publicLiabilityInsuranceExpiryDateNonUK"/>
+                    <div
+                        *ngIf="!providerReqForm.get('publicLiabilityInsuranceExpiryDateNonUK')?.valid && (providerReqForm.get('publicLiabilityInsuranceExpiryDateNonUK')?.dirty || providerReqForm.get('publicLiabilityInsuranceExpiryDateNonUK')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('publicLiabilityInsuranceExpiryDateNonUK')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.hasPublicLiabilityInsuranceNonUK == 'No' || (this.viewMode == true && this.providerForm?.policies_and_insurance_non_ukprovider_factor?.has_public_liability_insurance == 'No')">
+                    <label for="happensWhenThereIsPublicClaimNonUK">What will happen if a member of the public makes a claim</label>
+                    <textarea class="form-control" placeholder="Please provide more details" type="text" id="happensWhenThereIsPublicClaimNonUK"
+                        formControlName="happensWhenThereIsPublicClaimNonUK"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('happensWhenThereIsPublicClaimNonUK')?.valid && (providerReqForm.get('happensWhenThereIsPublicClaimNonUK')?.dirty || providerReqForm.get('happensWhenThereIsPublicClaimNonUK')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('happensWhenThereIsPublicClaimNonUK')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>             
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasEmployerLiabilityInsuranceNonUK"> <span class="required" *ngIf="providerReqForm.get('hasEmployerLiabilityInsuranceNonUK')?.errors?.['required']">*</span><strong> Non-UK providers only:</strong> Would your organisation’s insurances cover liability arising from injury sustained by a student as a result of their duties in the role?</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasEmployerLiabilityInsuranceNonUK-Yes">
+                                <input type="radio" id="hasEmployerLiabilityInsuranceNonUK-Yes" formControlName="hasEmployerLiabilityInsuranceNonUK" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasEmployerLiabilityInsuranceNonUK-No">
+                                <input type="radio" id="hasEmployerLiabilityInsuranceNonUK-No" formControlName="hasEmployerLiabilityInsuranceNonUK" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasEmployerLiabilityInsuranceNonUK == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_non_ukprovider_factor?.has_employer_liability_insurance == 'Yes')">
+                    <label for="employerInsuranceProviderNameNonUK">Insurance Provider Name</label>
+                    <input class="form-control" placeholder="Provider Name" type="text" id="employerInsuranceProviderNameNonUK"
+                        formControlName="employerInsuranceProviderNameNonUK"/>
+                    <div
+                        *ngIf="!providerReqForm.get('employerInsuranceProviderNameNonUK')?.valid && (providerReqForm.get('employerInsuranceProviderNameNonUK')?.dirty || providerReqForm.get('employerInsuranceProviderNameNonUK')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('employerInsuranceProviderNameNonUK')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div> 
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasEmployerLiabilityInsuranceNonUK == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_non_ukprovider_factor?.has_employer_liability_insurance == 'Yes')">
+                    <label for="employerInsuranceExpiryDateNonUK">Expiry Date</label>
+                    <input class="form-control" placeholder="Expiry Date" type="date" id="employerInsuranceExpiryDateNonUK"
+                        formControlName="employerInsuranceExpiryDateNonUK"/>
+                    <div
+                        *ngIf="!providerReqForm.get('employerInsuranceExpiryDateNonUK')?.valid && (providerReqForm.get('employerInsuranceExpiryDateNonUK')?.dirty || providerReqForm.get('employerInsuranceExpiryDateNonUK')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('employerInsuranceExpiryDateNonUK')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.hasEmployerLiabilityInsuranceNonUK == 'No' || (this.viewMode == true && this.providerForm?.policies_and_insurance_non_ukprovider_factor?.has_employer_liability_insurance == 'No')">
+                    <label for="happensWhenThereIsEmployeeClaimNonUK">What will happen if the placement student becomes ill or injured due to the work they complete on placement with you?</label>
+                    <textarea class="form-control" placeholder="Please provide more details" type="text" id="happensWhenThereIsEmployeeClaimNonUK"
+                        formControlName="happensWhenThereIsEmployeeClaimNonUK"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('happensWhenThereIsEmployeeClaimNonUK')?.valid && (providerReqForm.get('happensWhenThereIsEmployeeClaimNonUK')?.dirty || providerReqForm.get('happensWhenThereIsEmployeeClaimNonUK')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('happensWhenThereIsEmployeeClaimNonUK')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>             
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasInsuranceForLegalCostsForStudent"> <span class="required" *ngIf="providerReqForm.get('hasInsuranceForLegalCostsForStudent')?.errors?.['required']">*</span><strong> Non-UK providers only:</strong> Would your organisation’s insurances cover any legal/compensation costs arising from the placement student’s advice or professional services?</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasInsuranceForLegalCostsForStudent-Yes">
+                                <input type="radio" id="hasInsuranceForLegalCostsForStudent-Yes" formControlName="hasInsuranceForLegalCostsForStudent" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasInsuranceForLegalCostsForStudent-No">
+                                <input type="radio" id="hasInsuranceForLegalCostsForStudent-No" formControlName="hasInsuranceForLegalCostsForStudent" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasInsuranceForLegalCostsForStudent == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_non_ukprovider_factor?.has_insurance_for_legal_costs_for_student == 'Yes')">
+                    <label for="legalCostsInsuranceProviderName">Insurance Provider Name</label>
+                    <input class="form-control" placeholder="Provider Name" type="text" id="legalCostsInsuranceProviderName"
+                        formControlName="legalCostsInsuranceProviderName"/>
+                    <div
+                        *ngIf="!providerReqForm.get('legalCostsInsuranceProviderName')?.valid && (providerReqForm.get('legalCostsInsuranceProviderName')?.dirty || providerReqForm.get('legalCostsInsuranceProviderName')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('legalCostsInsuranceProviderName')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div> 
+                <div class="col-sm-4" *ngIf="this.providerReqForm.value.hasInsuranceForLegalCostsForStudent == 'Yes' || (this.viewMode == true && this.providerForm?.policies_and_insurance_non_ukprovider_factor?.has_insurance_for_legal_costs_for_student == 'Yes')">
+                    <label for="legalCostsInsuranceExpiryDate">Expiry Date</label>
+                    <input class="form-control" placeholder="Expiry Date" type="date" id="legalCostsInsuranceExpiryDate"
+                        formControlName="legalCostsInsuranceExpiryDate"/>
+                    <div
+                        *ngIf="!providerReqForm.get('legalCostsInsuranceExpiryDate')?.valid && (providerReqForm.get('legalCostsInsuranceExpiryDate')?.dirty || providerReqForm.get('legalCostsInsuranceExpiryDate')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('legalCostsInsuranceExpiryDate')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>        
+            </div>
+        </div>
+
+        <div>
+            <hr>
+            <h5 class="mb-3">Health and Safety</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasProcedureForRecordingIncidents"> <span class="required" *ngIf="providerReqForm.get('hasProcedureForRecordingIncidents')?.errors?.['required']">*</span>
+                        Does the organisation have a procedure for recording and reporting accidents/incidents?</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasProcedureForRecordingIncidents-Yes">
+                                <input type="radio" id="hasProcedureForRecordingIncidents-Yes" formControlName="hasProcedureForRecordingIncidents" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasProcedureForRecordingIncidents-No">
+                                <input type="radio" id="hasProcedureForRecordingIncidents-No" formControlName="hasProcedureForRecordingIncidents" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="hasHealthAndSafetyPolicy"> <span class="required" *ngIf="providerReqForm.get('hasHealthAndSafetyPolicy')?.errors?.['required']">*</span>
+                        Does the organisation have a written health and safety policy?</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasHealthAndSafetyPolicy-Yes">
+                                <input type="radio" id="hasHealthAndSafetyPolicy-Yes" formControlName="hasHealthAndSafetyPolicy" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="hasHealthAndSafetyPolicy-No">
+                                <input type="radio" id="hasHealthAndSafetyPolicy-No" formControlName="hasHealthAndSafetyPolicy" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="doesProvidesHealthAndSafetyTraining"> <span class="required" *ngIf="providerReqForm.get('doesProvidesHealthAndSafetyTraining')?.errors?.['required']">*</span>
+                        Does the organisation provide health and safety training for new employees?</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="doesProvidesHealthAndSafetyTraining-Yes">
+                                <input type="radio" id="doesProvidesHealthAndSafetyTraining-Yes" formControlName="doesProvidesHealthAndSafetyTraining" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="doesProvidesHealthAndSafetyTraining-No">
+                                <input type="radio" id="doesProvidesHealthAndSafetyTraining-No" formControlName="doesProvidesHealthAndSafetyTraining" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">University Access and Support</h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="canUndertakePlacementVisits"> <span class="required" *ngIf="providerReqForm.get('canUndertakePlacementVisits')?.errors?.['required']">*</span>
+                        Will staff from the University be able to undertake site visits during the placement as required in consultation with appropriate staff at your organisation? </label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="canUndertakePlacementVisits-Yes">
+                                <input type="radio" id="canUndertakePlacementVisits-Yes" formControlName="canUndertakePlacementVisits" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="canUndertakePlacementVisits-No">
+                                <input type="radio" id="canUndertakePlacementVisits-No" formControlName="canUndertakePlacementVisits" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.canUndertakePlacementVisits == 'No' || (this.viewMode == true && this.providerForm?.university_access_and_support_factor?.can_undertake_placement_visits == 'No')">
+                    <label for="reason">Please provide reasons</label>
+                    <textarea class="form-control" placeholder="Reasons" type="textarea" id="reason"
+                        formControlName="reason"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('reason')?.valid && (providerReqForm.get('reason')?.dirty || providerReqForm.get('reason')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('reason')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="confidentialityToBeTakenToAccount"> <span class="required" *ngIf="providerReqForm.get('confidentialityToBeTakenToAccount')?.errors?.['required']">*</span>
+                        Are there any issues relating to confidentiality or disclosure which the University will need to take into account in its procedures for assessing work undertaken by students on placement in your organisation? </label>
+                    <div class="row">   
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="confidentialityToBeTakenToAccount-Yes">
+                                <input type="radio" id="confidentialityToBeTakenToAccount-Yes" formControlName="confidentialityToBeTakenToAccount" value="Yes">
+                                Yes
+                            </label>
+                        </div>                    
+                        <div class="col-sm-3">
+                            <label class="radio-inline" for="confidentialityToBeTakenToAccount-No">
+                                <input type="radio" id="confidentialityToBeTakenToAccount-No" formControlName="confidentialityToBeTakenToAccount" value="No"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="this.providerReqForm.value.confidentialityToBeTakenToAccount == 'Yes' || (this.viewMode == true && this.providerForm?.university_access_and_support_factor?.confidentiality_to_be_taken_to_account == 'Yes')">
+                    <label for="moreDetailsToAccount">Please provide details</label>
+                    <textarea class="form-control" placeholder="Details" type="textarea" id="moreDetailsToAccount"
+                        formControlName="moreDetailsToAccount"></textarea>
+                    <div
+                        *ngIf="!providerReqForm.get('moreDetailsToAccount')?.valid && (providerReqForm.get('moreDetailsToAccount')?.dirty || providerReqForm.get('moreDetailsToAccount')?.touched)">
+                        <small id="helpId" *ngIf="providerReqForm.get('moreDetailsToAccount')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>     
+            </div>
+        </div>
+        <div class="d-flex justify-content-center" *ngIf="!viewMode">
+            <button class="theme-btn m-2" (click)="onSave(); $event.preventDefault()">Save Draft</button>
+            <button class="theme-btn m-2" [disabled]="!providerReqForm.valid" type="submit">Submit</button>
+        </div>
+    </form>
+</div>

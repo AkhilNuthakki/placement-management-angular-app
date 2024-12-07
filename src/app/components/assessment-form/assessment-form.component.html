@@ -1,0 +1,720 @@
+<ng-container *ngIf="errorMessage">
+    <app-error-message [errorMessage]="errorMessage"></app-error-message>
+</ng-container>
+
+<ng-container *ngIf="successMessage">
+    <app-success-message [successMessage]="successMessage"></app-success-message>
+</ng-container>
+
+<div class="p-sm-5 pt-2 mt-2">
+    <form class="form-border p-sm-4 p-3" [formGroup]="assessmentReqForm" (ngSubmit)="onSubmit()">
+        <h3 class="text-center">Placement Assessment Form</h3>
+        <div class="p-sm-1">
+            <p>
+                This form should be completed by the allocated School Placement Tutor before a formal approval of a placement can be authorised, following a review of the Authorisation Request Form and Placement Provider Form. There is a Placement Assessment Guidance document available on SharePoint to take you through this form and any necessary additional actions and escalation.
+            </p>
+            <p>
+                Based on the details provided in placement provider form and placement authorization request form, we are automatically filling some of the inputs in this form. we are improving this feature to auto fill for many more inputs of the form in near future.
+            </p>
+            <p><a class="theme-link" (click)="onAutoFillAssessmentFormDetails()">Click here</a> to Auto Fill</p>   
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Student Information</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="studentName">Student Name</label>
+                    <input class="form-control" placeholder="Student Name" type="text" id="studentName"
+                        formControlName="studentName" />
+                    <div
+                        *ngIf="!assessmentReqForm.get('studentName')?.valid && (assessmentReqForm.get('studentName')?.dirty || assessmentReqForm.get('studentName')?.touched)">
+                        <small id="helpId" *ngIf="assessmentReqForm.get('studentName')?.errors?.['required']"
+                            class="text-muted">Student Name is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Provider Information</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="providerName">Organization Name</label>
+                    <input class="form-control" placeholder="Organization Name" type="text" id="providerName"
+                        formControlName="providerName" />
+                    <div
+                        *ngIf="!assessmentReqForm.get('providerName')?.valid && (assessmentReqForm.get('providerName')?.dirty || assessmentReqForm.get('providerName')?.touched)">
+                        <small id="helpId" *ngIf="assessmentReqForm.get('providerName')?.errors?.['required']"
+                            class="text-muted">Organization Name is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <label for="impactUniversityReputation">
+                        <span class="required" *ngIf="assessmentReqForm.get('impactUniversityReputation')?.errors?.['required']">*</span>
+                        Assess the likely impact to the University’s reputation and integrity.</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="impactUniversityReputation-Low">
+                                    <input type="radio" id="impactUniversityReputation-Low" formControlName="impactUniversityReputation" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="impactUniversityReputation-Medium">
+                                    <input type="radio" id="impactUniversityReputation-Medium" formControlName="impactUniversityReputation" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="impactUniversityReputation-High">
+                                    <input type="radio" id="impactUniversityReputation-High" formControlName="impactUniversityReputation" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="row mb-2"><a class="theme-link" (click)="onCheckForFlags()">Check for flags</a></div>
+            <div class="p-sm-4 sub-info" *ngIf="this.flagsView">
+                <div class="p-sm-6 m-sm-6" *ngIf ="!this.anyFlags">
+                    <small class="text-muted">There are no flags on this provider in the database</small>
+                </div>
+                <div class="p-sm-6 m-sm-6" *ngIf ="this.anyFlags">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td scope="col">Status</td>
+                                <td scope="col">Count</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let flag of flagsForProvider">
+                                <td scope="row" class="text-muted">{{flag.status | titlecase}}</td>
+                                <td class="text-muted">{{flag.count}}</td>
+                              </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="p-sm-4 sub-info" *ngIf="this.flagsErrorMessage">
+                <small class="text-muted">{{this.flagsErrorMessage}}</small>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Information Match</h5>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label for="isStudentNameAndProviderAddressMatched">
+                        <span class="required" *ngIf="assessmentReqForm.get('isStudentNameAndProviderAddressMatched')?.errors?.['required']">*</span>
+                        Is the ‘Student Name’, ‘Employer Name’ and ‘Address where the placement will be based’ on the Authorisation Request Form and Placement Provider Form the same on both forms?</label>
+                        <div class="row mb-2"><a class="theme-link" (click)="onMatchInfo()">Match Information</a></div>
+                        <div class="p-sm-4 sub-info" *ngIf="this.matchInfoAssessmentView">
+                            <div class="p-sm-6 m-sm-6">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <td scope="col">Field Name</td>
+                                            <td scope="col">Matched</td>
+                                            <td scope="col">Info By Student</td>
+                                            <td scope="col">Info By Provider</td>
+                                          </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let matchInfoAssessment of matchInfoAssessmentResponse">
+                                            <td scope="row" class="text-muted">{{matchInfoAssessment.field_name}}</td>
+                                            <td class="text-muted">{{matchInfoAssessment.matched}}</td>
+                                            <td class="text-muted">{{matchInfoAssessment.response_by_student}}</td>
+                                            <td class="text-muted">{{matchInfoAssessment.response_by_provider}}</td>
+                                          </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="p-sm-4 sub-info" *ngIf="this.matchInfoErroMessage">
+                            <small class="text-muted">{{this.matchInfoErroMessage}}</small>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentNameAndProviderAddressMatched-Yes">
+                                    <input type="radio" id="isStudentNameAndProviderAddressMatched-Yes" formControlName="isStudentNameAndProviderAddressMatched" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentNameAndProviderAddressMatched-No">
+                                    <input type="radio" id="isStudentNameAndProviderAddressMatched-No" formControlName="isStudentNameAndProviderAddressMatched" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Role Information</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasMetDurationHoursRequirements">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasMetDurationHoursRequirements')?.errors?.['required']">*</span>
+                        Does the placement role meet the minimum requirements for duration and hours needed as part of the degree programme?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasMetDurationHoursRequirements-Yes">
+                                    <input type="radio" id="hasMetDurationHoursRequirements-Yes" formControlName="hasMetDurationHoursRequirements" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasMetDurationHoursRequirements-No">
+                                    <input type="radio" id="hasMetDurationHoursRequirements-No" formControlName="hasMetDurationHoursRequirements" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="hasMetMinimumAcademicRequirements">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasMetMinimumAcademicRequirements')?.errors?.['required']">*</span>
+                        Does the student meet the minimum academic requirements to go on placement?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasMetMinimumAcademicRequirements-Yes">
+                                    <input type="radio" id="hasMetMinimumAcademicRequirements-Yes" formControlName="hasMetMinimumAcademicRequirements" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasMetMinimumAcademicRequirements-No">
+                                    <input type="radio" id="hasMetMinimumAcademicRequirements-No" formControlName="hasMetMinimumAcademicRequirements" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="hasProviderCompliedWithResponsibilities">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasProviderCompliedWithResponsibilities')?.errors?.['required']">*</span>
+                        Has the placement provider confirmed that they will comply with the placement provider responsibilities?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasProviderCompliedWithResponsibilities-Yes">
+                                    <input type="radio" id="hasProviderCompliedWithResponsibilities-Yes" formControlName="hasProviderCompliedWithResponsibilities" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasProviderCompliedWithResponsibilities-No">
+                                    <input type="radio" id="hasProviderCompliedWithResponsibilities-No" formControlName="hasProviderCompliedWithResponsibilities" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="hasConfidenceOnProvider">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasConfidenceOnProvider')?.errors?.['required']">*</span>
+                        Do you have reasonable confidence that the proposed Placement Provider is an appropriate partner to allow students to meet the overall learning outcomes of the placement?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasConfidenceOnProvider-Yes">
+                                    <input type="radio" id="hasConfidenceOnProvider-Yes" formControlName="hasConfidenceOnProvider" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasConfidenceOnProvider-No">
+                                    <input type="radio" id="hasConfidenceOnProvider-No" formControlName="hasConfidenceOnProvider" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="isStudentVisaValid">
+                        <span class="required" *ngIf="assessmentReqForm.get('isStudentVisaValid')?.errors?.['required']">*</span>
+                        Does the student have a Student visa?</label>
+                        <small class="text-muted">Check the Placement Management Tracking Tool if you doubt the student’s declaration.</small>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentVisaValid-Yes">
+                                    <input type="radio" id="isStudentVisaValid-Yes" formControlName="isStudentVisaValid" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentVisaValid-No">
+                                    <input type="radio" id="isStudentVisaValid-No" formControlName="isStudentVisaValid" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="hasRoleDateComplyWithVisa">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasRoleDateComplyWithVisa')?.errors?.['required']">*</span>
+                        Does the placement role start date, end date and duration comply with the Student VISA?</label>
+                        <small class="text-muted">Check the Placement Management Tracking Tool if you doubt the student’s declaration.</small>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasRoleDateComplyWithVisa-Yes">
+                                    <input type="radio" id="hasRoleDateComplyWithVisa-Yes" formControlName="hasRoleDateComplyWithVisa" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasRoleDateComplyWithVisa-No">
+                                    <input type="radio" id="hasRoleDateComplyWithVisa-No" formControlName="hasRoleDateComplyWithVisa" value="No"> No
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasRoleDateComplyWithVisa-NA">
+                                    <input type="radio" id="hasRoleDateComplyWithVisa-NA" formControlName="hasRoleDateComplyWithVisa" value="NA"> NA
+                                </label>
+                            </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Work Factors</h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="organizationWorkingConditions">
+                        <span class="required" *ngIf="assessmentReqForm.get('organizationWorkingConditions')?.errors?.['required']">*</span>
+                        Assess the organisations working conditions and environment for the placement role.</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="organizationWorkingConditions-Low">
+                                    <input type="radio" id="organizationWorkingConditions-Low" formControlName="organizationWorkingConditions" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="organizationWorkingConditions-Medium">
+                                    <input type="radio" id="organizationWorkingConditions-Medium" formControlName="organizationWorkingConditions" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="organizationWorkingConditions-High">
+                                    <input type="radio" id="organizationWorkingConditions-High" formControlName="organizationWorkingConditions" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="willProvideTrainingToStudents">
+                        <span class="required" *ngIf="assessmentReqForm.get('willProvideTrainingToStudents')?.errors?.['required']">*</span>
+                        Will the student be provided with appropriate training to undertake tasks?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="willProvideTrainingToStudents-Yes">
+                                    <input type="radio" id="willProvideTrainingToStudents-Yes" formControlName="willProvideTrainingToStudents" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="willProvideTrainingToStudents-No">
+                                    <input type="radio" id="willProvideTrainingToStudents-No" formControlName="willProvideTrainingToStudents" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+             
+
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="isStudentWorkFromHome">
+                        <span class="required" *ngIf="assessmentReqForm.get('isStudentWorkFromHome')?.errors?.['required']">*</span>
+                        Assess the likelihood of the student to be working from home. </label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentWorkFromHome-Low">
+                                    <input type="radio" id="isStudentWorkFromHome-Low" formControlName="isStudentWorkFromHome" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentWorkFromHome-Medium">
+                                    <input type="radio" id="isStudentWorkFromHome-Medium" formControlName="isStudentWorkFromHome" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentWorkFromHome-High">
+                                    <input type="radio" id="isStudentWorkFromHome-High" formControlName="isStudentWorkFromHome" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="isInvolvesInternationalRemoteWorking">
+                        <span class="required" *ngIf="assessmentReqForm.get('isInvolvesInternationalRemoteWorking')?.errors?.['required']">*</span>
+                        Does the placement role start date, end date and duration comply with the Student VISA?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isInvolvesInternationalRemoteWorking-NA">
+                                    <input type="radio" id="isInvolvesInternationalRemoteWorking-NA" formControlName="isInvolvesInternationalRemoteWorking" value="NA"> N/A
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isInvolvesInternationalRemoteWorking-Low">
+                                    <input type="radio" id="isInvolvesInternationalRemoteWorking-Low" formControlName="isInvolvesInternationalRemoteWorking" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isInvolvesInternationalRemoteWorking-Medium">
+                                    <input type="radio" id="isInvolvesInternationalRemoteWorking-Medium" formControlName="isInvolvesInternationalRemoteWorking" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isInvolvesInternationalRemoteWorking-High">
+                                    <input type="radio" id="isInvolvesInternationalRemoteWorking-High" formControlName="isInvolvesInternationalRemoteWorking" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Travel and transport factors </h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="hasTravelIssues">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasTravelIssues')?.errors?.['required']">*</span>
+                        Assess the likelihood of the student having significant travel issues to and from the place of work. </label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasTravelIssues-Low">
+                                    <input type="radio" id="hasTravelIssues-Low" formControlName="hasTravelIssues" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasTravelIssues-Medium">
+                                    <input type="radio" id="hasTravelIssues-Medium" formControlName="hasTravelIssues" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasTravelIssues-High">
+                                    <input type="radio" id="hasTravelIssues-High" formControlName="hasTravelIssues" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="isRequiredToWorkAcrossMultipleSites">
+                        <span class="required" *ngIf="assessmentReqForm.get('isRequiredToWorkAcrossMultipleSites')?.errors?.['required']">*</span>
+                        Assess the likelihood that the student will be required to work across multiple sites other than the main Placement Provider address  </label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isRequiredToWorkAcrossMultipleSites-Low">
+                                    <input type="radio" id="isRequiredToWorkAcrossMultipleSites-Low" formControlName="isRequiredToWorkAcrossMultipleSites" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isRequiredToWorkAcrossMultipleSites-Medium">
+                                    <input type="radio" id="isRequiredToWorkAcrossMultipleSites-Medium" formControlName="isRequiredToWorkAcrossMultipleSites" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isRequiredToWorkAcrossMultipleSites-High">
+                                    <input type="radio" id="isRequiredToWorkAcrossMultipleSites-High" formControlName="isRequiredToWorkAcrossMultipleSites" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Location and region factors </h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="hasAnyRisksAtLocation">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasAnyRisksAtLocation')?.errors?.['required']">*</span>
+                        Assess the likelihood that the location of the main Placement Provider address has any risks.</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasAnyRisksAtLocation-Low">
+                                    <input type="radio" id="hasAnyRisksAtLocation-Low" formControlName="hasAnyRisksAtLocation" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasAnyRisksAtLocation-Medium">
+                                    <input type="radio" id="hasAnyRisksAtLocation-Medium" formControlName="hasAnyRisksAtLocation" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasAnyRisksAtLocation-High">
+                                    <input type="radio" id="hasAnyRisksAtLocation-High" formControlName="hasAnyRisksAtLocation" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="hasInappropriateAccommodation">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasInappropriateAccommodation')?.errors?.['required']">*</span>
+                        Assess the risk of the student having <strong>inappropriate</strong> accommodation arrangements when on placement?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasInappropriateAccommodation-Low">
+                                    <input type="radio" id="hasInappropriateAccommodation-Low" formControlName="hasInappropriateAccommodation" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasInappropriateAccommodation-Medium">
+                                    <input type="radio" id="hasInappropriateAccommodation-Medium" formControlName="hasInappropriateAccommodation" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasInappropriateAccommodation-High">
+                                    <input type="radio" id="hasInappropriateAccommodation-High" formControlName="hasInappropriateAccommodation" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Health and environment factors </h5>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label for="isStudentRequiredToTakeAnyMeasures">
+                        <span class="required" *ngIf="assessmentReqForm.get('isStudentRequiredToTakeAnyMeasures')?.errors?.['required']">*</span>
+                        Assess the likelihood of the student requiring to undertake precautionary measures to undertake the placement?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentRequiredToTakeAnyMeasures-Low">
+                                    <input type="radio" id="isStudentRequiredToTakeAnyMeasures-Low" formControlName="isStudentRequiredToTakeAnyMeasures" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentRequiredToTakeAnyMeasures-Medium">
+                                    <input type="radio" id="isStudentRequiredToTakeAnyMeasures-Medium" formControlName="isStudentRequiredToTakeAnyMeasures" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="isStudentRequiredToTakeAnyMeasures-High">
+                                    <input type="radio" id="isStudentRequiredToTakeAnyMeasures-High" formControlName="isStudentRequiredToTakeAnyMeasures" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Personal factors </h5>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label for="hasStudentPersonalFactorsImplicates">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasStudentPersonalFactorsImplicates')?.errors?.['required']">*</span>
+                        Assess the likelihood of the student requiring to undertake precautionary measures to undertake the placement?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasStudentPersonalFactorsImplicates-Low">
+                                    <input type="radio" id="hasStudentPersonalFactorsImplicates-Low" formControlName="hasStudentPersonalFactorsImplicates" value="Low">
+                                    Low
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasStudentPersonalFactorsImplicates-Medium">
+                                    <input type="radio" id="hasStudentPersonalFactorsImplicates-Medium" formControlName="hasStudentPersonalFactorsImplicates" value="Medium"> Medium
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasStudentPersonalFactorsImplicates-High">
+                                    <input type="radio" id="hasStudentPersonalFactorsImplicates-High" formControlName="hasStudentPersonalFactorsImplicates" value="High"> High
+                                </label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <div class="d-flex justify-content-start mb-2">
+                <h5>Policies and Insurance </h5>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="hasPublicLiabilityInsurance">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasPublicLiabilityInsurance')?.errors?.['required']">*</span>
+                        Does the Placement Provider have in place public liability insurance (or equivalent) to cover students on placement? </label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasPublicLiabilityInsurance-Yes">
+                                    <input type="radio" id="hasPublicLiabilityInsurance-Yes" formControlName="hasPublicLiabilityInsurance" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasPublicLiabilityInsurance-No">
+                                    <input type="radio" id="hasPublicLiabilityInsurance-No" formControlName="hasPublicLiabilityInsurance" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="hasEmployerLiabilityInsurance">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasEmployerLiabilityInsurance')?.errors?.['required']">*</span>
+                        Does the Placement Provider have in place employer’s liability insurance (or equivalent) to cover students on placement? </label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasEmployerLiabilityInsurance-Yes">
+                                    <input type="radio" id="hasEmployerLiabilityInsurance-Yes" formControlName="hasEmployerLiabilityInsurance" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasEmployerLiabilityInsurance-No">
+                                    <input type="radio" id="hasEmployerLiabilityInsurance-No" formControlName="hasEmployerLiabilityInsurance" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="doesHoldIndemnityInsurance">
+                        <span class="required" *ngIf="assessmentReqForm.get('doesHoldIndemnityInsurance')?.errors?.['required']">*</span>
+                        If applicable to the placement role, does the Placement Provider hold Professional Indemnity Insurance (or equivalent) that would cover the student?</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="doesHoldIndemnityInsurance-Yes">
+                                    <input type="radio" id="doesHoldIndemnityInsurance-Yes" formControlName="doesHoldIndemnityInsurance" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="doesHoldIndemnityInsurance-No">
+                                    <input type="radio" id="doesHoldIndemnityInsurance-No" formControlName="doesHoldIndemnityInsurance" value="No"> No
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="doesHoldIndemnityInsurance-NA">
+                                    <input type="radio" id="doesHoldIndemnityInsurance-NA" formControlName="doesHoldIndemnityInsurance" value="NA"> N/A
+                                </label>
+                            </div>
+                            </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="hasHealthAndSafetyPolicy">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasHealthAndSafetyPolicy')?.errors?.['required']">*</span>
+                        Does the Placement Provider have in place an appropriate Health and Safety Policy at the location(s) where the student is to work? </label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasHealthAndSafetyPolicy-Yes">
+                                    <input type="radio" id="hasHealthAndSafetyPolicy-Yes" formControlName="hasHealthAndSafetyPolicy" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasHealthAndSafetyPolicy-No">
+                                    <input type="radio" id="hasHealthAndSafetyPolicy-No" formControlName="hasHealthAndSafetyPolicy" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">University Access and Support </h5>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="hasProviderHasAnyObligationsToVisits">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasProviderHasAnyObligationsToVisits')?.errors?.['required']">*</span>
+                        Does the Placement Provider have any objections to the University undertaking site visits to support the student? </label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasProviderHasAnyObligationsToVisits-Yes">
+                                    <input type="radio" id="hasProviderHasAnyObligationsToVisits-Yes" formControlName="hasProviderHasAnyObligationsToVisits" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasProviderHasAnyObligationsToVisits-No">
+                                    <input type="radio" id="hasProviderHasAnyObligationsToVisits-No" formControlName="hasProviderHasAnyObligationsToVisits" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="hasAnyIssuesRelatedToConfidentiality">
+                        <span class="required" *ngIf="assessmentReqForm.get('hasAnyIssuesRelatedToConfidentiality')?.errors?.['required']">*</span>
+                        Does the Placement Provider have any issues relating to confidentiality or disclosure which the University will need to consider? </label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasAnyIssuesRelatedToConfidentiality-Yes">
+                                    <input type="radio" id="hasAnyIssuesRelatedToConfidentiality-Yes" formControlName="hasAnyIssuesRelatedToConfidentiality" value="Yes">
+                                    Yes
+                                </label>
+                            </div>                    
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="hasAnyIssuesRelatedToConfidentiality-No">
+                                    <input type="radio" id="hasAnyIssuesRelatedToConfidentiality-No" formControlName="hasAnyIssuesRelatedToConfidentiality" value="No"> No
+                                </label>
+                            </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Tutor Declaration </h5>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label for="placementAuthorizationRequestStatus">
+                        <span class="required" *ngIf="assessmentReqForm.get('placementAuthorizationRequestStatus')?.errors?.['required']">*</span>
+                        <strong> I have assessed the information provided in the Authorisation Request Form and the Placement Provider Form and have made the following decision:</strong></label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="placementAuthorizationRequestStatus-Authorized">
+                                    <input type="radio" id="placementAuthorizationRequestStatus-Authorized" formControlName="placementAuthorizationRequestStatus" value="AUTHORIZED"> Placement request authorised
+                                </label>
+                            </div>                    
+                            <div class="col-sm-6">
+                                <label class="radio-inline" for="placementAuthorizationRequestStatus-OnHold">
+                                    <input type="radio" id="placementAuthorizationRequestStatus-OnHold" formControlName="placementAuthorizationRequestStatus" value="ONHOLD"> Placement request on hold until further information is provided 
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline" for="placementAuthorizationRequestStatus-Rejected">
+                                    <input type="radio" id="placementAuthorizationRequestStatus-Rejected" formControlName="placementAuthorizationRequestStatus" value="REJECTED"> Placement request rejected
+                                </label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="form-group row" *ngIf="this.assessmentReqForm.value.placementAuthorizationRequestStatus == 'ONHOLD' 
+            || this.assessmentReqForm.value.placementAuthorizationRequestStatus == 'REJECTED' 
+            || (this.viewMode == true && (this.placementAssessment?.placement_authorization_request_status == 'ONHOLD' 
+            || this.placementAssessment?.placement_authorization_request_status =='REJECTED'))">
+                <div class="col-sm-12">
+                    <label for="authorizationComments">Please provide reasons for decision:</label>
+                    <textarea class="form-control" placeholder="Reasons" type="text" id="authorizationComments"
+                        formControlName="authorizationComments" ></textarea>
+                    <div
+                        *ngIf="!assessmentReqForm.get('authorizationComments')?.valid && (assessmentReqForm.get('authorizationComments')?.dirty || assessmentReqForm.get('authorizationComments')?.touched)">
+                        <small id="helpId" *ngIf="assessmentReqForm.get('authorizationComments')?.errors?.['required']"
+                            class="text-muted">This info is
+                            required</small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center" *ngIf="!viewMode">
+            <button class="theme-btn m-2" (click)="onSave(); $event.preventDefault()">Save Draft</button>
+            <button class="theme-btn m-2" [disabled]="!assessmentReqForm.valid" type="submit">Submit</button>
+        </div>
+    </form>
+</div>

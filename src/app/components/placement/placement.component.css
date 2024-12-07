@@ -1,0 +1,38 @@
+.ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+  }
+  
+  .ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: .5rem;
+  }
+  
+  select {
+    width: 100%;
+    padding: .5rem;
+  }
+
+  .form-border {
+    border-style: groove;
+    border-width: 1px;
+    border-left: 5px solid #207EA4;
+    border-color: #207EA4;
+    border-radius: 8px;
+  }
+
+  .sub-info {
+    border-left: 5px solid #dddddde1;
+  }
+
+  button.example-custom-date-class {
+    background: #207EA4;
+    border-radius: 100%;
+  }

@@ -1,0 +1,7 @@
+.block-border {
+    border-style: groove;
+    border: solid #207EA4;
+    border-color: #207EA4;
+    border-width: 2px;
+    border-radius: 8px;
+  }

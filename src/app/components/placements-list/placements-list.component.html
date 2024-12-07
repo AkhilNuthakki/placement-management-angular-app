@@ -1,0 +1,143 @@
+
+    <div class="justify-content-center p-sm-5 pt-2 mt-2">
+        <ng-container *ngIf="!arePlacementsAvailable && isPlacementsFetched">
+            <ng-container  *ngIf="isStudent" >
+                <div class="text-center">
+                    <h4 class="p-3">No placements found !!!</h4>
+                       <h5 class="p-3"> You can raise or view the placement authorization requests in <a class="theme-link" routerLink="/requests">My Requests</a> page.</h5>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!isStudent">
+                <div class="text-center">
+                    <h4 class="p-3"> No active placements found !!!</h4>
+                </div>
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="arePlacementsAvailable && isPlacementsFetched">
+
+            <ng-container *ngIf="isStudent">
+                <h5 class="m-3">My Placements</h5>
+                <div class="list-border p-sm-4 m-sm-2" *ngFor="let placement of placements">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="row p-sm-2">
+                                <div class="col-sm-4">
+                                    <strong>Role :</strong>
+                                    {{placement.role_title}}
+                                </div>
+                                <div class="col-sm-4">
+                                    <strong>Organization :</strong> 
+                                    {{placement.placement_provider.name}}
+                                </div>
+                            </div>
+                            <div class="row p-sm-2">
+                                <div class="col-sm-4">
+                                    <strong>Start Date :</strong>
+                                    {{placement.start_date | date}}
+                                </div>
+                                <div class="col-sm-4">
+                                    <strong>End Date :</strong>
+                                    {{placement.end_date | date}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="align-self-center col-sm-2">
+                            <button  class="theme-btn m-2" (click)="viewPlacement(placement.id)">
+                            View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="isTutor">
+                <div class="p-sm-4 pb-sm-2">
+                    <form [formGroup]="filterPlacementForm">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label for="providerName">Provider Name</label>
+                                <input class="form-control" placeholder="Filter by Provider Name" type="text" id="providerName"
+                                formControlName="providerName" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="studentName">Student Name</label>
+                                <input class="form-control" placeholder="Filter by Student Name" type="text" id="studentName"
+                                formControlName="studentName" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="course">Course</label>
+                                <select class="form-control" formControlName="course">
+                                    <option value="Filter by course" disabled selected>Filter by cource</option>
+                                    <option *ngFor="let course of courseList" [ngValue]="course">{{course}}</option>
+                                  </select>
+                            </div>
+                            <div class="col-sm-3 p-sm-2 d-flex justify-content-end">
+                                <button class="theme-btn m-2" (click)="OnFilter()">Filter</button>
+                                <button class="theme-btn m-2" (click)="onClearFilter()">Clear</button>
+                            </div>
+        
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <hr>
+                    <h5 class="m-3">Placements</h5>
+                    <ng-container *ngIf="!isFilteredPlacementsExists && isPlacementsFiltered">
+                        <div class="text-center p-sm-4 m-sm-4">
+                            <h4 class="p-3"> No Placements found based on given filter details !!!</h4>
+                        </div>
+                </ng-container>
+                    <div class="list-border p-sm-4 m-sm-3" *ngFor="let placement of placements">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div class="row p-sm-2">
+                                    <div class="col-sm-4">
+                                        <strong>Name :</strong>
+                                        {{placement.student.first_name + ' ' + placement.student.last_name}}
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <strong>Course :</strong>
+                                        {{placement.student.course}}
+                                    </div>
+                                </div>
+                                <div class="row p-sm-2">
+                                    <div class="col-sm-4">
+                                        <strong>Role :</strong> 
+                                        {{placement.role_title}}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <strong>Start Date :</strong>
+                                        {{placement.start_date | date}}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <strong>End Date :</strong>
+                                        {{placement.end_date | date}}
+                                    </div>
+                                </div>
+                                <div class="row p-sm-2">
+                                    <div class="col-sm-4">
+                                        <strong>Organization :</strong> 
+                                        {{placement.placement_provider.name}}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <strong>Contact Name :</strong> 
+                                        {{placement.placement_provider.contact_name}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="align-self-center col-sm-2">
+                                <button class="theme-btn m-2" (click)="viewPlacement(placement.id)">View Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </ng-container>
+
+        </ng-container>
+    </div>
+    
+
+

@@ -1,0 +1,73 @@
+/* You can add global styles to this file, and also import other style files */
+.theme-color {
+    background-color: #E4042C;
+}
+
+.theme-font {
+    font-family: "MaisonNeue", Arial, sans-serif;
+}
+
+.theme-btn {
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #207EA4;
+    border-radius: 6px;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "MaisonNeue", Arial, sans-serif;
+    font-weight: 300;
+    color: #000000;
+    background-color: #FFFFFF;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.theme-btn:disabled {
+    color: #000000;
+    border: 0.05em solid #000000;
+    background-color: #FFFFFF;
+}
+
+.theme-btn:hover:enabled {
+    color: #FFFFFF;
+    background-color: #207EA4;
+}
+
+@media all and (max-width:30em) {
+    .theme-btn {
+        display: block;
+        margin: 0.4em auto;
+    }
+}
+
+.theme-link {
+    text-decoration: none;
+    color: #207EA4;
+    cursor: pointer;
+}
+
+.theme-link:hover {
+    text-decoration: underline;
+    color: #207EA4;
+}
+
+.theme-nav-link {
+    color:#FFFFFF
+}
+
+.theme-nav-link:hover {
+    color: #FFFFFF;
+    padding-bottom: 4px;
+    border-bottom: 4px solid #FFFFFF;
+}
+
+.required{
+    color: #a94442;
+}
+
+.theme-link-disable {
+ pointer-events: none;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

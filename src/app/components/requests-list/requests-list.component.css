@@ -1,0 +1,12 @@
+.list-border {
+    border-style: groove;
+    border-width: 1px;
+    border-left: 5px solid #207EA4;
+    border-color: #207EA4;
+    border-radius: 8px;
+  }
+
+  select {
+    width: 100%;
+    padding: .5rem;
+  }

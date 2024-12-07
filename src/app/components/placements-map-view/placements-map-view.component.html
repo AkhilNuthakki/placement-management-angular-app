@@ -1,0 +1,60 @@
+
+
+<div class="form-border p-sm-4 pt-2 mt-2">
+    <div>
+        <h4 class="text-center mb-3">Placements Map View</h4>
+        <hr>
+    </div>
+    <div class="form-group row">
+        <google-map
+        height="500px"
+        width="100%"
+        [zoom]="zoom"
+        [center]="center"
+        [options]="options"
+      > <map-marker  *ngFor="let marker of markers" 
+      [position]="marker.position"
+      [label]="marker.label"
+      [title]="marker.title"
+      /></google-map>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-between">
+        <h5 class="mb-3">Smart Visit Plan</h5>
+        <button class="theme-btn" (click)="OnShowSmartVisitSuggestions()">Show Suggestions</button>
+    </div>
+    <ng-container *ngIf="!showSmartVisitPlanSuggestions">
+        <div>
+            <small class="text-muted">Please click on the show suggestions button to view the smart placement visit plan sugestions</small>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="showSmartVisitPlanSuggestions">
+        <div class="p-sm-3 m-sm-5" *ngIf="smartVisitPlanSuggestions.length == 0">
+            The smart placement visit plan suggestions algorithm couldn't find any time saving visiting plans as the placements are apart 15 miles atleast from each other.
+        </div>
+        <div class="mt-2" *ngIf="smartVisitPlanSuggestions.length > 0">
+            <div class="p-sm-3 m-sm-5 smart-plan-item" *ngFor="let placements of smartVisitPlanSuggestions; let suggestionId = index">
+                <p><b> Placements that can be visited in a trip - {{suggestionId+1}}</b></p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td scope="col"><b>Sl No</b></td>
+                            <td scope="col"><b>Student Name</b></td>
+                            <td scope="col"><b>Placement Address</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let placement of placements; let placementId = index">
+                            <td class="align-content-center">{{placementId + 1}}</td>
+                            <td class="align-content-center">{{placement.student.first_name + ' ' + placement.student.last_name}}</td>
+                            <td class="align-content-center">{{placement.placement_provider.address + ', ' + placement.placement_provider.postcode}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    
+        </div>
+    </ng-container>
+
+</div>

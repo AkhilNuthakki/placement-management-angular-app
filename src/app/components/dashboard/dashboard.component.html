@@ -1,0 +1,93 @@
+
+<div class="p-sm-2 pt-sm-5">
+    <h3 class="text-center">Dashboard</h3>
+    <hr>
+    <div class="row p-sm-2">
+        <div class="row d-flex justify-content-between">
+            <div class="block-border col-sm-2 p-sm-3">
+                <p>Submitted Requests</p>
+                {{this.getRequestCountBasedOnStatus("SUBMITTED")}}
+            </div>
+            <div class="block-border col-sm-2 p-sm-3">
+                <p>Pending Requests</p>
+                {{this.getRequestCountBasedOnStatus("PENDING")}}
+            </div>
+            <div class="block-border col-sm-2 p-sm-3">
+                <p>On Hold Requests</p>
+                {{this.getRequestCountBasedOnStatus("ONHOLD")}}
+            </div>
+            <div class="block-border col-sm-2 p-sm-3">
+                <p>Rejected Requests</p>
+                {{this.getRequestCountBasedOnStatus("REJECTED")}}
+            </div>
+            <div class="block-border col-sm-2 p-sm-3">
+                <p>Authorized Requests</p>
+                {{this.getRequestCountBasedOnStatus("AUTHORIZED")}}
+            </div>
+        </div>
+      
+    
+    
+    </div>
+
+
+    <div class="row mt-4 d-flex justify-content-between">
+        <div class="col-sm-6">
+            <div class="block-border p-sm-4">
+                <div class="row mb-2">
+                    <h5>Requests Grouped by Provider</h5>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td scope="col">Provider Name</td>
+                            <td scope="col">Submitted</td>
+                            <td scope="col">Authorized</td>
+                            <td scope="col">Rejected</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let requestForProvider of requestCountByProviderName">
+                            <td >{{requestForProvider.provider_name}}</td>
+                            <td >{{this.getRequestCountBasedOnStatusAndProviderName(requestForProvider, "SUBMITTED")}}</td>
+                            <td>{{this.getRequestCountBasedOnStatusAndProviderName(requestForProvider, "AUTHORIZED")}}</td>
+                            <td>{{this.getRequestCountBasedOnStatusAndProviderName(requestForProvider, "REJECTED")}}</td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-sm-6 ">
+            <div class="block-border p-sm-4">
+                <div class="row mb-2">
+                    <h5>Requests Grouped by Course</h5>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td scope="col">Course Name</td>
+                            <td scope="col">Submitted</td>
+                            <td scope="col">Authorized</td>
+                            <td scope="col">Rejected</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let requestForCourse of requestCountByCourse">
+                            <td >{{requestForCourse.course}}</td>
+                            <td >{{this.getRequestCountBasedOnStatusAndCourse(requestForCourse, "SUBMITTED")}}</td>
+                            <td>{{this.getRequestCountBasedOnStatusAndCourse(requestForCourse, "AUTHORIZED")}}</td>
+                            <td>{{this.getRequestCountBasedOnStatusAndCourse(requestForCourse, "REJECTED")}}</td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+      
+    
+    
+    </div>
+</div>
+

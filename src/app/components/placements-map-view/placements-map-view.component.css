@@ -1,0 +1,11 @@
+.form-border {
+    border-style: groove;
+    border-width: 1px;
+    border-left: 5px solid #207EA4;
+    border-color: #207EA4;
+    border-radius: 8px;
+  }
+
+  .smart-plan-item {
+    border-left: 3px solid #207EA4;
+  }

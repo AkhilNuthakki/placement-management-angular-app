@@ -1,0 +1,288 @@
+<ng-container *ngIf="errorMessage">
+    <app-error-message [errorMessage]="errorMessage"></app-error-message>
+</ng-container>
+
+<ng-container *ngIf="successMessage">
+    <app-success-message [successMessage]="successMessage"></app-success-message>
+</ng-container>
+
+<div class="form-border p-sm-4 pt-2 mt-2">
+    <form class="" [formGroup]="placementForm" (ngSubmit)="OnUpdatePlacement()">
+        <div class="d-flex justify-content-between">
+            <div>
+                <ng-container *ngIf="isStudent">&nbsp;&nbsp;&nbsp;</ng-container>
+            </div>
+            <h3 >Placement Details</h3>
+            <div>
+                <button class="theme-btn" (click)="OnEdit(); $event.preventDefault()"
+                *ngIf="isStudent && viewMode">Edit</button>
+            <button class="theme-btn" (click)="OnCancel(); $event.preventDefault()"
+                *ngIf="isStudent && !viewMode">Cancel</button>
+            </div>
+            
+        </div>
+        <div *ngIf="!isStudent">
+            <hr>
+            <h5 class="mb-3">Student Details</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="studentFirstName">First Name</label>
+                    <input class="form-control" placeholder="First Name" type="text" id="studentFirstName"
+                        formControlName="studentFirstName">
+                </div>
+                <div class="col-sm-4">
+                    <label for="studentLastName">Last Name</label>
+                    <input class="form-control" placeholder="Last Name" type="text" id="studentLastName"
+                        formControlName="studentLastName" />
+                </div>
+                <div class="col-sm-4">
+                    <label for="studentNumber">Student Number</label>
+                    <input class="form-control" placeholder="Student Number" type="text" id="studentNumber"
+                        formControlName="studentNumber" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="studentEmailId">Email</label>
+                    <input class="form-control" placeholder="Email ID" type="text" id="studentEmailId"
+                        formControlName="studentEmailId" />
+                </div>
+                <div class="col-sm-4">
+                    <label for="studentTelephone">Contact Telephone Number</label>
+                    <input class="form-control" placeholder="Telephone" type="text" id="studentTelephone"
+                        formControlName="studentTelephone" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="studentSchool">School</label>
+                    <input class="form-control" placeholder="School" type="text" id="studentSchool"
+                        formControlName="studentSchool" />
+                </div>
+                <div class="col-sm-6">
+                    <label for="studentCourse">Programme of Study</label>
+                    <input class="form-control" placeholder="Course" type="text" id="studentCourse"
+                        formControlName="studentCourse" />
+                </div>
+
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Role Details</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="roleTitle">Role Title</label>
+                    <input class="form-control" placeholder="Role Title" type="text" id="roleTitle"
+                        formControlName="roleTitle" />
+                </div>
+                <div class="col-sm-4">
+                    <label for="roleStartDate">Role Start Date</label>
+                    <input class="form-control" placeholder="Start Date" type="date" id="roleStartDate"
+                        formControlName="roleStartDate" />
+                    <div
+                        *ngIf="!placementForm.get('roleStartDate')?.valid && (placementForm.get('roleStartDate')?.dirty || placementForm.get('roleStartDate')?.touched)">
+                        <small id="helpId" *ngIf="placementForm.get('roleStartDate')?.errors?.['required']"
+                            class="text-muted">Start Date is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="roleEndDate">Role End Date</label>
+                    <input class="form-control" placeholder="End Date" type="date" id="roleEndDate"
+                        formControlName="roleEndDate" />
+                    <div
+                        *ngIf="!placementForm.get('roleEndDate')?.valid && (placementForm.get('roleEndDate')?.dirty || placementForm.get('roleEndDate')?.touched)">
+                        <small id="helpId" *ngIf="placementForm.get('roleEndDate')?.errors?.['required']"
+                            class="text-muted">End Date is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+            <h5 class="mb-3">Placement Provider Details</h5>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="providerName">Organization Name</label>
+                    <input class="form-control" placeholder="Organization Name" type="text" id="providerName"
+                        formControlName="providerName" />
+                </div>
+                <div class="col-sm-4">
+                    <label for="providerWebAddress">Website Address</label>
+                    <input class="form-control" placeholder="Website Address" type="text" id="providerWebAddress"
+                        formControlName="providerWebAddress" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-9">
+                    <label for="providerAddress">Organization Address</label>
+                    <input class="form-control" placeholder="Address" type="text" id="providerAddress"
+                        formControlName="providerAddress" />
+                </div>
+                <div class="col-sm-3">
+                    <label for="providerPostcode">Postcode</label>
+                    <input class="form-control" placeholder="Postcode" type="text" id="providerPostcode"
+                        formControlName="providerPostcode" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="providerContactName">Contact Name</label>
+                    <input class="form-control" placeholder="Contact Name" type="text" id="providerContactName"
+                        formControlName="providerContactName" />
+                    <div
+                        *ngIf="!placementForm.get('providerContactName')?.valid && (placementForm.get('providerContactName')?.dirty || placementForm.get('providerContactName')?.touched)">
+                        <small id="helpId" *ngIf="placementForm.get('providerContactName')?.errors?.['required']"
+                            class="text-muted">Contact Name is
+                            required</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="providerContactJobTitle">Contact Job Title</label>
+                    <input class="form-control" placeholder="Contact Job Title" type="text" id="providerContactJobTitle"
+                        formControlName="providerContactJobTitle" />
+                    <div
+                        *ngIf="!placementForm.get('providerContactJobTitle')?.valid && (placementForm.get('providerContactJobTitle')?.dirty || placementForm.get('providerContactJobTitle')?.touched)">
+                        <small id="helpId" *ngIf="placementForm.get('providerContactJobTitle')?.errors?.['required']"
+                            class="text-muted">Contact Job Title is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="providerContactEmail">Contact Email</label>
+                    <input class="form-control" placeholder="Contact Email" type="email" id="providerContactEmail"
+                        formControlName="providerContactEmail" />
+                    <div
+                        *ngIf="!placementForm.get('providerContactEmail')?.valid && (placementForm.get('providerContactEmail')?.dirty || placementForm.get('providerContactEmail')?.touched)">
+                        <small id="helpId" *ngIf="placementForm.get('providerContactEmail')?.errors?.['required']"
+                            class="text-muted">Contact Email is
+                            required</small>
+                        <small id="helpId" *ngIf="placementForm.get('providerContactEmail')?.errors?.['email']"
+                            class="text-muted">Email
+                            should be valid</small>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="providerContactTelephone">Contact Telephone</label>
+                    <input class="form-control" placeholder="Contact Telephone" type="text"
+                        id="providerContactTelephone" formControlName="providerContactTelephone" />
+                    <div
+                        *ngIf="!placementForm.get('providerContactTelephone')?.valid && (placementForm.get('providerContactTelephone')?.dirty || placementForm.get('providerContactTelephone')?.touched)">
+                        <small id="helpId" *ngIf="placementForm.get('providerContactTelephone')?.errors?.['required']"
+                            class="text-muted">Telephone is
+                            required</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center m-2" *ngIf="!viewMode">
+            <button class="theme-btn m-2" [disabled]="!placementForm.valid" type="submit">Update Placement</button>
+        </div>
+    </form>
+    <div>
+        <hr>
+        <div class="d-flex justify-content-between">
+            <h5 class="mb-3">Placement Visits</h5>
+            <div>
+                <button class="theme-btn" (click)="OnShowBookVisitView(); $event.preventDefault()"
+                *ngIf="isStudent && !showBookSlotView">Book</button>
+            <button class="theme-btn" (click)="OnHideBookVisitView(); $event.preventDefault()"
+                *ngIf="isStudent && showBookSlotView">Cancel</button>
+            </div>
+        </div>
+        
+        <p class="pt-2" *ngIf="!visitsExists && !showBookSlotView">No upcoming placement visits.</p>
+        <ng-container *ngIf="visitsExists && !showBookSlotView">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td scope="col"><b>Line Manager Name</b></td>
+                        <td scope="col"><b>Line Manager Email</b></td>
+                        <td scope="col"><b>Date & Time</b></td>
+                        <td scope="col" *ngIf="isStudent"><b></b></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let visit of placementVisits">
+                        <td class="align-content-center">{{visit.provider_contact_name}}</td>
+                        <td class="align-content-center">{{visit.provider_contact_email}}</td>
+                        <td class="align-content-center">{{visit.start_time | date :'mediumDate'}}, {{visit.start_time | date :'shortTime'}} - {{visit.end_time | date :'shortTime'}}</td>
+                        <td><a *ngIf="isStudent" class="theme-link" (click)="OnVisitChange(visit); $event.preventDefault()">Change</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+        
+        <ng-container *ngIf="showBookSlotView">
+            <form [formGroup]="scheduleVisitForm" (ngSubmit)="OnSchedulePlacement()">
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label for="providerContactName">Line Manager Name</label>
+                            <input class="form-control" placeholder="Line Manager Name" type="text" id="providerContactName"
+                                formControlName="providerContactName" />
+                            <div
+                                *ngIf="!scheduleVisitForm.get('providerContactName')?.valid && (scheduleVisitForm.get('providerContactName')?.dirty || scheduleVisitForm.get('providerContactName')?.touched)">
+                                <small id="helpId" *ngIf="scheduleVisitForm.get('providerContactName')?.errors?.['required']"
+                                    class="text-muted">Manager Name is
+                                    required</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="providerContactEmail">Line Manager Email</label>
+                            <input class="form-control" placeholder="Line Manager Email" type="email" id="providerContactEmail"
+                                formControlName="providerContactEmail" />
+                            <div
+                                *ngIf="!scheduleVisitForm.get('providerContactEmail')?.valid && (scheduleVisitForm.get('providerContactEmail')?.dirty || scheduleVisitForm.get('providerContactEmail')?.touched)">
+                                <small id="helpId" *ngIf="scheduleVisitForm.get('providerContactEmail')?.errors?.['required']"
+                                    class="text-muted">Manager Email is
+                                    required</small>
+                                <small id="helpId" *ngIf="scheduleVisitForm.get('providerContactEmail')?.errors?.['email']"
+                                    class="text-muted">Email
+                                    should be valid</small>
+                            </div>
+                        </div>
+
+                    </div>
+                <div class="form-group row">
+                    <div class="col-sm-4 mt-3">
+                            <label for="placementVisitDate">Select Date & Slot : 
+                                <span *ngIf="this.selectedSlot != undefined"><b>{{this.selectedSlot.start_time| date :'mediumDate'}}, {{this.selectedSlot.start_time| date :'shortTime'}} - {{this.selectedSlot.end_time| date :'shortTime'}}</b></span></label>
+                            <div class="mt-2">
+                                <mat-card class="demo-inline-calendar-card">
+                                    <mat-calendar [selected]="selectedDate" (selectedChange)="selectedVisitDate($event)" [dateClass]="dateClass"></mat-calendar>
+                                  </mat-card>
+                            </div>
+                    </div>
+                    <div class="col-sm-8 mt-2">
+                        <p class="p-sm-5" *ngIf="filteredSlotsOnDate.length == 0">
+                            <small class="text-muted">Selected date doesn't have any available slots. Please select highlighted dates.</small>
+                        </p>
+                        <table class="table" *ngIf="filteredSlotsOnDate.length > 0">
+                            <thead>
+                                <tr>
+                                    <td scope="col"><b>{{this.selectedDate | date}}</b> - Time Slots</td>
+                                    <td scope="col"></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let slot of filteredSlotsOnDate">
+                                    <td class="align-content-center">{{slot.start_time | date :'shortTime'}} - {{slot.end_time | date :'shortTime'}}</td>
+                                    <td><button class="theme-btn" (click)="OnBookSlot(slot); $event.preventDefault()">Select</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center m-2">
+                    <button class="theme-btn m-2" [disabled]="!scheduleVisitForm.valid || scheduleVisitForm.value.visitStartTime === updatePlacementVisit?.start_time" type="submit">Schedule Placement Visit</button>
+                </div>
+            </form>
+
+        </ng-container>
+        
+    </div>
+</div>
